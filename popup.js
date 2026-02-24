@@ -92,30 +92,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentChildren = currentTree[0].children || [];
 
             // Build an index of existing nodes to preserve ID where possible
+            // We use arrays for values to handle duplicate URLs/names
             const index = new Map();
 
             function buildIndex(node) {
-                if (node.url) {
-                    index.set(`url:${node.url}|name:${node.title}`, node);
-                } else {
-                    index.set(`folder:${node.title}`, node);
+                const key = node.url ? `url:${node.url}|name:${node.title}` : `folder:${node.title}`;
+                if (!index.has(key)) {
+                    index.set(key, []);
                 }
+                index.get(key).push(node);
+
                 if (node.children) {
                     node.children.forEach(buildIndex);
                 }
             }
             currentChildren.forEach(buildIndex);
 
-            // 2. We will clear the root and rebuild it. 
-            // A more robust approach updates in place, but that is extremely complex with reordering.
-            // To preserve chrome IDs, we ideally only `move` existing, `create` new, `remove` deleted.
-            // 
-            // Our Strategy:
-            // - Iterate the new YAML flat structure to find what exists vs what is new.
-            // - Unfortunately chrome.bookmarks API moving items around cleanly while recreating folders is hard.
-            // - The safest way in Chrome Extensions to "replace" the tree is doing removeTree on old children, 
-            //   and create for all. However that loses the internal IDs.
-            // Let's implement smart syncing.
+            // ...
 
             showMessage('Importing...', false);
 
@@ -128,7 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     const yNode = yamlNodes[i];
                     const isUrl = yNode.type === 'url' || !!yNode.url;
                     const key = isUrl ? `url:${yNode.url}|name:${yNode.name}` : `folder:${yNode.name}`;
-                    const existing = index.get(key);
+                    const existingList = index.get(key);
+
+                    // Consume one existing node from the list if available
+                    let existing = null;
+                    if (existingList && existingList.length > 0) {
+                        existing = existingList.shift();
+                    }
 
                     let nodeId;
 
@@ -137,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         visitedIds.add(nodeId);
 
                         // Move to the correct relative position if needed
-                        // Important: We must await this to ensure order is preserved
                         try {
                             await chrome.bookmarks.move(nodeId, { parentId: parentId, index: indexInParent });
                         } catch (err) {
@@ -183,13 +181,15 @@ document.addEventListener('DOMContentLoaded', () => {
             await syncNodes(parsedYaml.children, BOOKMARKS_BAR_ID);
 
             // 3. Remove orphans (nodes that were in Chrome but not in the YAML)
-            for (const [key, node] of index.entries()) {
-                if (!visitedIds.has(node.id)) {
-                    console.log("Removing orphan:", node.title);
-                    try {
-                        await chrome.bookmarks.removeTree(node.id);
-                    } catch (err) {
-                        console.warn("Failed to remove orphan, might be already gone:", err);
+            for (const [key, nodeList] of index.entries()) {
+                for (const node of nodeList) {
+                    if (!visitedIds.has(node.id)) {
+                        console.log("Removing orphan:", node.title);
+                        try {
+                            await chrome.bookmarks.removeTree(node.id);
+                        } catch (err) {
+                            console.warn("Failed to remove orphan, might be already gone:", err);
+                        }
                     }
                 }
             }
