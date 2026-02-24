@@ -4,7 +4,7 @@ const yaml = require('js-yaml');
 const { v4: uuidv4 } = require('uuid');
 
 const localAppData = process.env.LOCALAPPDATA;
-const bookmarksPath = path.join(localAppData, 'Google', 'Chrome', 'User Data', 'Default', 'Bookmarks');
+const bookmarksPath = process.env.BOOKMARKS_PATH || path.join(localAppData, 'Google', 'Chrome', 'User Data', 'Default', 'Bookmarks');
 const yamlPath = path.join(__dirname, 'bookmarks.yaml');
 const backupPath = path.join(__dirname, 'Bookmarks.bak');
 
@@ -78,7 +78,7 @@ function importBookmarks() {
     }
 
     const rawData = fs.readFileSync(bookmarksPath, 'utf8');
-    
+
     // Create Backup
     fs.writeFileSync(backupPath, rawData, 'utf8');
     console.log(`Created backup at ${backupPath}`);
