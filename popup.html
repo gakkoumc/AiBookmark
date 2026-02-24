@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>AiBookmark</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>AiBookmark</h1>
+      <p class="subtitle">YAML Converter</p>
+    </header>
+    
+    <div class="main-content">
+      <div class="toolbar">
+        <button id="exportBtn" class="btn primary">Export YAML</button>
+        <button id="importBtn" class="btn secondary">Import YAML</button>
+      </div>
+
+      <div class="editor-container">
+        <textarea id="yamlEditor" spellcheck="false" placeholder="ここにYAML形式でブックマークデータが表示されます。&#10;編集後、ImportボタンでChromeに反映できます。"></textarea>
+      </div>
+      
+      <div id="statusMessage" class="status-message hidden"></div>
+    </div>
+  </div>
+
+  <script src="js-yaml.min.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
