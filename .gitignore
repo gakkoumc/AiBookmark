@@ -1,3 +1,13 @@
-node_modules/  
-*.bak  
-*.json  
+# 依存関係
+node_modules/
+
+# OS / エディタ由来のファイル
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 一時ファイル
+*.bak
+*.tmp
+*~
