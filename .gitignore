@@ -1,3 +1,13 @@
-node_modules/  
-*.bak  
-*.json  
+# dependencies
+node_modules/
+
+# OS/editor artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# temporary files
+*.bak
+*.tmp
+*~
