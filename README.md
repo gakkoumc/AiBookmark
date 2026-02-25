@@ -1,25 +1,45 @@
-# Chrome Extension: AiBookmark (YAML Converter)
+# AiBookmark
 
-Google ChromeのブックマークをYAML形式でインポート・エクスポートし、テキストエディタのように一括編集できるChrome拡張機能です。
+AiBookmark is a Chrome extension that exports/imports bookmarks as YAML, so you can edit bookmark trees safely in your editor and sync changes back to the Bookmarks Bar.
 
-## インストール方法 (開発者モード)
+## Features
+- Export current Bookmarks Bar structure to YAML.
+- Edit folder/url hierarchy in YAML.
+- Import YAML with smart merge behavior to preserve existing bookmark IDs when possible.
+- Remove orphaned nodes not present in imported YAML.
 
-1. このリポジトリ（ディレクトリ）をローカルにダウンロード・配置します。
-2. Chromeブラウザを開き、アドレスバーに `chrome://extensions/` と入力して拡張機能ページを開きます。
-3. 画面右上の **「デベロッパー モード」** のトグルスイッチをオンにします。
-4. 画面左上の **「パッケージ化されていない拡張機能を読み込む」** をクリックします。
-5. このディレクトリ (`AiBookmark/`) を選択します。
-6. インストールが完了し、Chromeのツールバーにアイコンが追加されます（ピン留めすると便利です）。
+## Project status
+This repository is prepared for OSS publication with MIT licensing and contribution/security guidelines.
 
-## 使い方
+## Installation (Developer mode)
+1. Clone this repository.
+2. Open `chrome://extensions/` in Chrome.
+3. Enable **Developer mode**.
+4. Click **Load unpacked**.
+5. Select this repository directory.
 
-1. アドレスバー横のAiBookmarkアイコンをクリックしてポップアップを開きます。
-2. **「Export YAML」** ボタンを押すと、現在のブックマークバーの内容がYAML形式でテキストエリアに出力されます。
-3. テキストエリア内のYAMLをコピーして使い慣れたテキストエディタで編集するか、直接テキストエリアで直感的に階層の移動、アイテムの追加などを編集します。
-4. 編集が終わったら、テキストエリアに上書きした状態で **「Import YAML」** ボタンを押します。
-5. エラーが発生しなければ、即座にChromeのブックマークバーに反映されます。
+> Note: Ensure your extension `manifest.json` is present in the loaded directory. (If your local workspace excludes it, add it before loading.)
 
-## 特徴と安全性
-- YAMLデータを元に現在のブックマークを比較し、再帰的に「スマートマージ」を行います。
-- 極力、既存のブックマークのIDを変えずにフォルダ移動などを実行します（履歴やショートカットが壊れにくくなります）。
-- ブックマークバー(`ID: 1`) を対象として動作します。
+## Usage
+1. Open the AiBookmark popup.
+2. Click **Export YAML** to dump current bookmarks to the editor.
+3. Edit YAML.
+4. Click **Import YAML** to apply updates.
+
+## Privacy & data handling
+- AiBookmark operates locally via Chrome Bookmarks API.
+- It does not transmit bookmarks to external servers.
+
+## Third-party dependency
+- `js-yaml` (MIT License): <https://github.com/nodeca/js-yaml>
+
+See [NOTICE](NOTICE.md) for bundled third-party notices.
+
+## Contributing
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
+
+## Security
+Please report vulnerabilities according to [SECURITY.md](SECURITY.md).
+
+## License
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
