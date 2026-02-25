@@ -43,4 +43,4 @@ AiBookmark は、Chrome のブックマークを YAML 形式でエクスポー�
 脆弱性報告は [SECURITY.md](SECURITY.md) の手順に従ってください。
 
 ## ライセンス
-本プロジェクトは MIT License の下で公開しています。詳細は [LICENSE](LICENSE) を参照してください。
+本プロジェクトは MIT License の下で公開しています。法的に有効な原文は [LICENSE](LICENSE) を参照してください（日本語参考訳: [LICENSE.ja.md](LICENSE.ja.md)）。
